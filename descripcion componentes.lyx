@@ -1,0 +1,203 @@
+#LyX 1.6.4 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\language spanish
+\inputencoding auto
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Descripción de componentes de netcat
+\end_layout
+
+\begin_layout Author
+tuareg, ojcchar
+\end_layout
+
+\begin_layout Abstract
+Este documento contiene una descripción general de cada uno de los componentes
+ presentes en el (los) diagrama(s) construidos por los autores, como parte
+ del proyecto Netcat Under the Wood del grupo UNLock.
+ El objetivo es entender la utilidad y la función de cada componente, las
+ relaciones entre componentes y las funciones que componen cada estructura.
+ El documento esta dividido de acuerdo a los archivos C de netcat o por
+ paquetes, teniendo en cuenta el (los) diagrama(s) de componentes presentes
+ en el archivo netcat-explained-project.eap.
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+netcat.c
+\end_layout
+
+\begin_layout Subsection
+Descripción del paquete
+\end_layout
+
+\begin_layout Standard
+Maneja toda la parte de control y de interacción con el usuario.
+ Así mismo contiene las variables de estado de la aplicación.
+\end_layout
+
+\begin_layout Subsection
+Componentes
+\end_layout
+
+\begin_layout Subsubsection
+Argument handler
+\end_layout
+
+\begin_layout Standard
+Maneja el parse de los argumentos pasados por línea de comandos y verifica
+ que estos sean proporcionados de manera correcta por el usuario.
+ 
+\end_layout
+
+\begin_layout Standard
+Para ello se utiliza la función 
+\emph on
+getopt_long
+\emph default
+ de la librería de C de GNU (componente 
+\emph on
+Program options parser
+\emph default
+ en el diagrama), que permite el uso de opciones con nombres largos (--opcion)
+ y cortos (-o).
+\end_layout
+
+\begin_layout Standard
+Si el usuario no proporciona algún argumento, el componente Argument CL
+ reader en 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:argumentClReader"
+
+\end_inset
+
+ despliega el prompt para que el usuario efectivamente ingrese los argumentos.
+\end_layout
+
+\begin_layout Standard
+Este manejo de argumentos se realiza en el 
+\emph on
+main
+\emph default
+.
+\end_layout
+
+\begin_layout Section
+network.c
+\end_layout
+
+\begin_layout Subsection
+Descripción del paquete
+\end_layout
+
+\begin_layout Subsection
+Componentes
+\end_layout
+
+\begin_layout Section
+misc.c
+\end_layout
+
+\begin_layout Subsection
+Descripción del paquete
+\end_layout
+
+\begin_layout Standard
+Contiene varias funciones de utileria o de ayuda, las cuales son usadas
+ por los componentes core de netcat.
+\end_layout
+
+\begin_layout Subsection
+Componentes
+\end_layout
+
+\begin_layout Subsubsection
+Argument CL reader
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:argumentClReader"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Por medio de la función 
+\emph on
+netcat_commandline_read
+\emph default
+ se despliega un prompt (Cmd line: ) que lee los argumentos que el usuario
+ escriba.
+ Esta función utiliza otra llamada 
+\emph on
+netcat_string_split
+\emph default
+ que hace un división de un string por espacios.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-1"
+
+\end_inset
+
+Proyecto GNU; Parsing program options using getopt; disponible en http://www.gnu.o
+rg/s/libc/manual/html_node/Getopt.html; consultado el 20 de diciembre de
+ 2009.
+\end_layout
+
+\end_body
+\end_document
