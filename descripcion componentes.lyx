@@ -1,4 +1,4 @@
-#LyX 1.6.4 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.4.1 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -142,6 +142,131 @@ Descripción del paquete
 Componentes
 \end_layout
 
+\begin_layout Subsubsection
+Hostname Resolver
+\end_layout
+
+\begin_layout Standard
+A partir de un nombre o una dirección IP válida consigue alias y dirección
+ del host hacia el que se apunta la dirección, para llenar la estructura
+ 
+\shape italic
+nc_host_t,
+\shape default
+ basándose en la función 
+\shape italic
+gethostbyname
+\shape default
+ de 
+\shape italic
+ntdb.h.
+\end_layout
+
+\begin_layout Subsubsection
+Obtener puerto
+\end_layout
+
+\begin_layout Standard
+Traduce el número de puerto o el nombre de puerto (para puertos entre 0-1023
+ asignados por la IANA
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+http://www.iana.org/assignments/port-numbers
+\end_layout
+
+\end_inset
+
+) a formato númerico y ASCII, y almacena esta información en la estructura
+ 
+\shape italic
+nc_port_t.
+\end_layout
+
+\begin_layout Subsubsection
+Compatibilidad de estructuras de datos de red.
+\end_layout
+
+\begin_layout Standard
+Tanto netcat_inet_ntop como netcat_inet_pton son funciones de compatibilidad
+ con sistemas POSIX que no tienen las funciones 
+\shape italic
+INET_NTOP
+\shape default
+ e 
+\shape italic
+INET_PTON.
+\end_layout
+
+\begin_layout Subsubsection
+Crear Socket
+\end_layout
+
+\begin_layout Standard
+Crea un socket con las opciones SO_LINGER y SO_REUSEADDR activadas.
+ Para SO_LINGER específicamente indica l_onoff = 1 y l_linger = 0, lo que
+ hace que cuando se cierre un socket se borren todos los datos pendientes
+ (no se espera que se envíen) y se envíe inmediatamente una señal RST (a
+ esto se le llama un cerrado fuerte)
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-5"
+
+\end_inset
+
+.
+ La opción SO_REUSEADDR permite al programa utilizar un puerto que este
+ en TIME_WAIT, es decir que haya sido cerrado y este esperando el último
+ ACK desde el otro par.
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-6"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Esto permite a netcat:
+\end_layout
+
+\begin_layout Itemize
+Terminar las conexiones establecidas de manera inmediata al finalizar el
+ programa.
+\end_layout
+
+\begin_layout Itemize
+Reutilizar puertos usados en instancias anteriores del programa finalizadas
+ solo segundos antes, en nuevas conexiones.
+\end_layout
+
+\begin_layout Itemize
+Reiniciar una conexión de forma inmediata, es decir, crear una conexión
+ con un host, cerrar el programa y abrirlo inmediatamente sin ningún error
+ como 
+\begin_inset Quotes eld
+\end_inset
+
+Address already in use
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+La función devuelve -1 si el socket no se pudo crear y -2 si el socket no
+ se pudo configurar correctamente (en el caso de que el socket no haya sido
+ configurado correctamente se borra).
+\end_layout
+
+\begin_layout Subsubsection
+
+\end_layout
+
 \begin_layout Section
 misc.c
 \end_layout
@@ -197,6 +322,30 @@ key "key-1"
 Proyecto GNU; Parsing program options using getopt; disponible en http://www.gnu.o
 rg/s/libc/manual/html_node/Getopt.html; consultado el 20 de diciembre de
  2009.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-6"
+
+\end_inset
+
+Fine, Thomas A; Bind: Address Already in Use; disponible en http://hea-www.harvar
+d.edu/~fine/Tech/addrinuse.html; consultado el 22 de Diciembre de 2009.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-5"
+
+\end_inset
+
+W.
+ Richard Stevens, Bill Fenner, Andrew M.
+ Rudoff; UNIX® Network Programming Volume 1, Third Edition: The Sockets
+ Networking API; Addison Wesley; 3rd Edition; November 21, 2003.
 \end_layout
 
 \end_body
