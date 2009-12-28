@@ -1,4 +1,4 @@
-#LyX 1.6.4.1 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.4 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -79,7 +79,8 @@ Descripción del paquete
 \end_layout
 
 \begin_layout Standard
-Maneja toda la parte de control y de interacción con el usuario.
+Maneja toda la parte de control de la aplicación y de interacción con el
+ usuario.
  Así mismo contiene las variables de estado de la aplicación.
 \end_layout
 
@@ -263,8 +264,17 @@ La función devuelve -1 si el socket no se pudo crear y -2 si el socket no
  configurado correctamente se borra).
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Section
+core.c
+\end_layout
 
+\begin_layout Subsection
+Descripción del paquete
+\end_layout
+
+\begin_layout Standard
+Se encarga de la conexión, lectura y escritura de datos a través de sockets.
+ 
 \end_layout
 
 \begin_layout Section
@@ -310,6 +320,27 @@ netcat_commandline_read
 netcat_string_split
 \emph default
  que hace un división de un string por espacios.
+\end_layout
+
+\begin_layout Section
+flagset.c
+\end_layout
+
+\begin_layout Subsection
+Descripción del paquete
+\end_layout
+
+\begin_layout Standard
+Contiene varias funciones que manejan el arreglo de banderas o de puertos
+ usados por netcat cuando está en modo conexión (
+\emph on
+NETCAT_CONNECT
+\emph default
+).
+\end_layout
+
+\begin_layout Subsection
+Componentes
 \end_layout
 
 \begin_layout Bibliography
