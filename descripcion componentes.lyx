@@ -273,8 +273,82 @@ Descripción del paquete
 \end_layout
 
 \begin_layout Standard
-Se encarga de la conexión, lectura y escritura de datos a través de sockets.
+Se encarga del establecimiento de la conexión, lectura y escritura de datos
+ a través de sockets.
+ Todo esto usando sockets TCP/UDP.
+\end_layout
+
+\begin_layout Subsection
+Componentes
+\end_layout
+
+\begin_layout Subsubsection
+Connection handler
+\end_layout
+
+\begin_layout Standard
+Las funciones 
+\emph on
+core_tcp_connect 
+\emph default
+y 
+\emph on
+core_udp_connect
+\emph default
+ se encargan del establecimiento de conexiones TCP y UDP, respectivamente.
+\end_layout
+
+\begin_layout Standard
+Se utilizan algunas de las esctructuras de datos del namespace de internet
+ (
+\emph on
+in.h
+\emph default
+) de la librería de C del proyecto GNU 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-2"
+
+\end_inset
+
+, como por ejemplo 
+\emph on
+sockaddr_in
+\emph default
+ que representa una dirección de socket de IPv4, y las funciones del API
+ de sockets de la misma libreria (
+\emph on
+bind
+\emph default
+ para asignar una dirección a un socket y la función 
+\emph on
+connect
+\emph default
+ para realizar la conexión con el host remoto, la cual puede operar en modo
+ bloqueante o no bloqueante 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-3"
+
+\end_inset
+
+, es decir que esta función espera o no la respuesta del servidor, respectivamen
+te).
  
+\end_layout
+
+\begin_layout Standard
+Para sockets TCP se utiliza el modo no bloqueante y para UDP el bloqueante
+ (Ver 
+\emph on
+netcat_socket_new_connect
+\emph default
+) ¿Por qué se utiliza los modos de conexión de esta manera? uno esperaría
+ que fuera al revés, TCP bloqueante y UDP no bloqueante (
+\bar under
+por investigar
+\bar default
+).
 \end_layout
 
 \begin_layout Section
@@ -377,6 +451,29 @@ W.
  Richard Stevens, Bill Fenner, Andrew M.
  Rudoff; UNIX® Network Programming Volume 1, Third Edition: The Sockets
  Networking API; Addison Wesley; 3rd Edition; November 21, 2003.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-2"
+
+\end_inset
+
+Proyecto GNU; The Internet namespace; disponible en http://www.gnu.org/s/libc/manu
+al/html_node/Internet-Namespace.html; consultado el 29 de diciembre de 2009.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-3"
+
+\end_inset
+
+Proyecto GNU; Using Sockets with Connections, Making a Connection; disponible
+ en http://www.gnu.org/software/libc/manual/html_node/Connecting.html; consultado
+ el 29 de diciembre de 2009.
 \end_layout
 
 \end_body
