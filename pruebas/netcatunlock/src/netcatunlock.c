@@ -2,9 +2,9 @@
  ============================================================================
  Name        : netcatunlock.c
  Author      : tuareg,ojcchar
- Version     :
+ Version     : 0.1
  Copyright   : copyright UNLock
- Description : Hello World in C, Ansi-style
+ Description : mini netcat
  ============================================================================
  */
 
@@ -29,63 +29,66 @@ addrPort getAddressPort(char *addr, char *port);
 int main(int argc, char *argv[]) {
 	short var;
 
+	//Se verifica el numero de argumentos
 	if (argc < 3) {
 		printUsage();
 		return EXIT_SUCCESS;
 	}
 
 	puts("These are the arguments:");
-	//puts((const char )argc);
 	for (var = 1; var < argc; ++var) {
-		//puts((char)var);
 		puts(argv[var]);
 	}
 
+	//se obtiene la direccion y el puerto si son validos
 	addrPort ap = getAddressPort(argv[1], argv[2]);
 
+	//se crea el socket de tipo stream y con el namespace de internet
 	int sock = socket(PF_INET, SOCK_STREAM, 0);
-	if (sock == -1) {
+	if (sock < 0) {
 		puts("Could not create the socket");
 		exit(EXIT_FAILURE);
 	}
 
+	//se crea la estructura sockaddr_in para realizar la conexion
 	struct sockaddr_in rem_addr;
-	memset(&rem_addr, 0, sizeof(rem_addr));
-	rem_addr.sin_family = AF_INET;
-	rem_addr.sin_port = ap.port;
-	memcpy(&rem_addr.sin_addr, ap.inAdd, sizeof(rem_addr.sin_addr));
+	memset(&rem_addr, 0, sizeof(rem_addr)); //se pone en cero
+	rem_addr.sin_family = AF_INET; //la familia de direcciones de internet IPv4
+	rem_addr.sin_port = ap.port; //se fija el puerto
+	memcpy(&rem_addr.sin_addr, &ap.inAdd, sizeof(rem_addr.sin_addr)); //se fija la direccion
 
-	struct sockaddr * hh = (struct sockaddr *) &rem_addr;
+	//se realiza la conexion
+	if (connect(sock, (struct sockaddr *) &rem_addr, sizeof(rem_addr)) < 0) {
+		puts("Could not connect to the host");
+		exit(EXIT_FAILURE);
+	}else
+		puts("Connection was successful");
 
-	//int ret = connect(sock, hh, sizeof(rem_addr));
-	/*if ((ret < 0) && (errno != EINPROGRESS)) {
-	 puts("error.....");
-	 exit(EXIT_FAILURE);
-	 }
-	 if (ret == -1) {
-	 puts("Could not connect to the host");
-	 exit(EXIT_FAILURE);
-	 }
-	 if (ret == 0) {
-	 puts("Could connect to the host");
-	 }
-	 */
-	//puts(resp);
+	//se cierra el sockets
+	if ((shutdown(sock, 0) < 0) ) {
+		puts("Could not shutdown the sockets");
+		exit(EXIT_FAILURE);
+	}
 
 	return EXIT_SUCCESS;
 }
 
 addrPort getAddressPort(char *addr, char *port) {
 	struct in_addr *inAdd;
+	memset(&inAdd,0,sizeof(inAdd));
+
+	//se obtiene la direccion en in_addr
 	int ret = inet_aton(addr, inAdd);
 	if (!ret) {
 		puts("Address is not valid");
 		exit(EXIT_FAILURE);
 	}
 
-	char *endptr;
-	long por = strtol(port, endptr, 10);
+	char **endptr;
+	memset(&endptr,0,sizeof(endptr));
 
+	//se obtiene el puerto del string y se verifica
+	long por = strtol(port, endptr, 10);
 	if ((por < 0) || (por > 65536)) {
 		puts("Port is not valid");
 		exit(EXIT_FAILURE);
@@ -93,7 +96,8 @@ addrPort getAddressPort(char *addr, char *port) {
 
 	addrPort ap;
 	ap.inAdd = inAdd;
-	ap.port = (in_port_t) por;
+	//se obtiene el puerto de acuerdo a la ordenacion de bits de linux
+	ap.port = htons(por);
 	return ap;
 
 }
@@ -102,3 +106,4 @@ void printUsage() {
 	puts("Usage: netcatunlock host port");
 
 }
+
