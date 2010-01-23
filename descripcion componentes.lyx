@@ -1,4 +1,4 @@
-#LyX 1.6.4 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.4.1 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -139,6 +139,31 @@ network.c
 Descripción del paquete
 \end_layout
 
+\begin_layout Standard
+Se encarga de todas las funciones de creación, conexión, asociación y escucha
+ de 
+\series bold
+sockets TCP
+\series default
+, así como la obtención y almacenamiento apropiado de información necesaria
+ para estos efectos, utilizando estructuras de datos del namespace de internet
+ (
+\shape italic
+in.h
+\shape default
+), y de 
+\shape italic
+netcat.h,
+\shape default
+ para su uso en :...(
+\shape slanted
+\bar under
+por averiguar
+\shape default
+\bar default
+)
+\end_layout
+
 \begin_layout Subsection
 Componentes
 \end_layout
@@ -264,6 +289,34 @@ La función devuelve -1 si el socket no se pudo crear y -2 si el socket no
  configurado correctamente se borra).
 \end_layout
 
+\begin_layout Subsubsection
+Crear socket y conectar (netcat_socket_new_connect)
+\end_layout
+
+\begin_layout Standard
+Crea un socket non-blocking
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-1"
+
+\end_inset
+
+, o asincrónico, en el dominio adecuado (AF_INET/AF_UNSPEC) e intenta asociarlo
+ (bind) con una dirección (si es proporcionada) y un puerto local, para
+ luego realizar la conexión con la dirección remota.
+ En caso de un error devuelve -1 ó -2 si falló la creación del socket, -3
+ si falló la asociación con la dirección y puerto remoto, -4 si falló la
+ configuración del socket como non-blocking y -5 si falla la conexión.
+\end_layout
+
+\begin_layout Subsubsection
+Crear socket a la escucha
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
 \begin_layout Section
 core.c
 \end_layout
@@ -328,7 +381,7 @@ connect
  bloqueante o no bloqueante 
 \begin_inset CommandInset citation
 LatexCommand cite
-key "key-3"
+key "key-3,key-1"
 
 \end_inset
 
@@ -348,7 +401,11 @@ netcat_socket_new_connect
 \bar under
 por investigar
 \bar default
-).
+ - creo que según 
+\emph on
+netcat_socket_new_connect
+\emph default
+ todas las conexiones que se hagan ).
 \end_layout
 
 \begin_layout Section
@@ -417,6 +474,30 @@ NETCAT_CONNECT
 Componentes
 \end_layout
 
+\begin_layout Section
+telnet.c
+\end_layout
+
+\begin_layout Subsection
+Descripción del paquete
+\end_layout
+
+\begin_layout Subsection
+Componentes
+\end_layout
+
+\begin_layout Section
+udphelper.c
+\end_layout
+
+\begin_layout Subsection
+Descripción del paquete
+\end_layout
+
+\begin_layout Subsection
+Componentes
+\end_layout
+
 \begin_layout Bibliography
 \begin_inset CommandInset bibitem
 LatexCommand bibitem
@@ -474,6 +555,19 @@ key "key-3"
 Proyecto GNU; Using Sockets with Connections, Making a Connection; disponible
  en http://www.gnu.org/software/libc/manual/html_node/Connecting.html; consultado
  el 29 de diciembre de 2009.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "Non-Blocking"
+key "key-1"
+
+\end_inset
+
+Scott Klement; Blocking vs.
+ non-blocking sockets; disponible en http://www.scottklement.com/rpg/socktut/nonbl
+ocking.html; consultado el 23 de Febrero de 2010
 \end_layout
 
 \end_body
