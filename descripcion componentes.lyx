@@ -1,4 +1,4 @@
-#LyX 1.6.4.1 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.4 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -313,10 +313,6 @@ key "key-1"
 Crear socket a la escucha
 \end_layout
 
-\begin_layout Standard
-
-\end_layout
-
 \begin_layout Section
 core.c
 \end_layout
@@ -326,8 +322,8 @@ Descripción del paquete
 \end_layout
 
 \begin_layout Standard
-Se encarga del establecimiento de la conexión, lectura y escritura de datos
- a través de sockets.
+Se encarga del control para el establecimiento de la conexión, lectura y
+ escritura de datos a través de sockets.
  Todo esto usando sockets TCP/UDP.
 \end_layout
 
@@ -408,6 +404,94 @@ netcat_socket_new_connect
  todas las conexiones que se hagan ).
 \end_layout
 
+\begin_layout Subsubsection
+Listener
+\end_layout
+
+\begin_layout Standard
+Las funciones 
+\emph on
+core_tcp_listen
+\emph default
+ y 
+\emph on
+core_udp_listen
+\emph default
+ son las encargadas de aceptar una conexión TCP y UDP válida, respectivamente,
+ una vez creados los sockets de escucha, en el paquete network.c.
+\end_layout
+
+\begin_layout Standard
+Para el caso de TCP, es relativamente sencillo obtener una nueva conexión
+ válida mediante la función 
+\emph on
+accept
+\emph default
+, la cual es llamada en el paquete network.
+ 
+\end_layout
+
+\begin_layout Standard
+Para el caso de UDP, hay que obtener el endpoint y poder simular una conexión
+ establecida, para esto se necesita leer lo que le llegue por el socket,
+ y tomar como endpoint el destino del primer paquete que le llegue (de todas
+ maneras se necesita crear la conexión con la función 
+\emph on
+connect
+\emph default
+, lo que se debe hacer es obtener toda la información para realizar la conexión:
+ dirección IP, puerto, etc.).
+ Aquí se utiliza lo que se llama datos auxiliares (Ancillary Data)
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-7"
+
+\end_inset
+
+, que representan información sobre routing y comunicación en los paquetes,
+ que debe ser consultada por la aplicación del kernel (parece que esta informaci
+ón se consulta en IPv4 de manera diferente por el 
+\begin_inset Quotes eld
+\end_inset
+
+API de sockets raw
+\begin_inset Quotes erd
+\end_inset
+
+, en cambio en IPv6 se necesita hacer por la consulta de 
+\begin_inset Quotes eld
+\end_inset
+
+Ancillary Data
+\begin_inset Quotes erd
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-7"
+
+\end_inset
+
+, 
+\bar under
+por investigar mejor
+\bar default
+ (comparar los headers de IPv4 e IPv6)) mediante la función 
+\emph on
+recvmsg
+\emph default
+.
+ Ahora bien, en los comentarios dice que se necesita crear un socket por
+ cada interfaz, y hacer lo descrito en la anterior frase para cada socket,
+ 
+\bar under
+no entiendo por qué
+\bar default
+.
+ 
+\end_layout
+
 \begin_layout Section
 misc.c
 \end_layout
@@ -474,6 +558,38 @@ NETCAT_CONNECT
 Componentes
 \end_layout
 
+\begin_layout Subsubsection
+Flag handler
+\end_layout
+
+\begin_layout Standard
+Esta compuesto por las funciones 
+\emph on
+netcat_flag_init
+\emph default
+,
+\emph on
+ netcat_flag_set
+\emph default
+,
+\emph on
+ netcat_flag_get
+\emph default
+,
+\emph on
+ netcat_flag_next
+\emph default
+,
+\emph on
+ netcat_flag_count 
+\emph default
+y
+\emph on
+ netcat_flag_rand
+\emph default
+, las cuales se encarga de todo el manejo de las banderas.
+\end_layout
+
 \begin_layout Section
 telnet.c
 \end_layout
@@ -496,6 +612,14 @@ Descripción del paquete
 
 \begin_layout Subsection
 Componentes
+\end_layout
+
+\begin_layout Subsubsection
+Socket opener and closer
+\end_layout
+
+\begin_layout Subsubsection
+Ancillary data reader
 \end_layout
 
 \begin_layout Bibliography
@@ -568,6 +692,18 @@ key "key-1"
 Scott Klement; Blocking vs.
  non-blocking sockets; disponible en http://www.scottklement.com/rpg/socktut/nonbl
 ocking.html; consultado el 23 de Febrero de 2010
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-7"
+
+\end_inset
+
+W.
+ Stevens; Advanced Sockets API for IPv6 (RFC 2292); 1998; disponible en
+ http://www.ietf.org/rfc/rfc2292.txt; consultado el 7 de Marzo de 2010
 \end_layout
 
 \end_body
