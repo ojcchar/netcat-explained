@@ -1,4 +1,4 @@
-#LyX 1.6.4 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -322,8 +322,8 @@ Descripción del paquete
 \end_layout
 
 \begin_layout Standard
-Se encarga del control para el establecimiento de la conexión, lectura y
- escritura de datos a través de sockets.
+Se encarga del control y coordinación para el establecimiento de la conexión,
+ lectura y escritura de datos a través de sockets.
  Todo esto usando sockets TCP/UDP.
 \end_layout
 
@@ -449,8 +449,8 @@ key "key-7"
 \end_inset
 
 , que representan información sobre routing y comunicación en los paquetes,
- que debe ser consultada por la aplicación del kernel (parece que esta informaci
-ón se consulta en IPv4 de manera diferente por el 
+ que debe ser consultada por la aplicación, del kernel (parece que esta
+ información se consulta en IPv4 de manera diferente por el 
 \begin_inset Quotes eld
 \end_inset
 
@@ -490,6 +490,71 @@ no entiendo por qué
 \bar default
 .
  
+\end_layout
+
+\begin_layout Subsubsection
+I/O Reader and writter
+\end_layout
+
+\begin_layout Standard
+La función 
+\emph on
+core_readwrite
+\emph default
+ se encarga de manejar la lectura y escritura a través de sockets y de la
+ entrada/salida estándar.
+ 
+\end_layout
+
+\begin_layout Standard
+Las funciónes del API de lectura y escrita de FD (file descriptors) que
+ se usan son 
+\emph on
+read
+\emph default
+ (lectura), 
+\emph on
+write
+\emph default
+ (escritura), 
+\emph on
+select
+\emph default
+ (modo de multiplexación de I/O
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-5"
+
+\end_inset
+
+ (secciones 6.2 y 6.3)), 
+\emph on
+recvfrom
+\emph default
+ (lectura para sockets UDP).
+ Netcat no utiliza la función sendto para enviar datagramas, tal vez sea
+ por simulación de conexión establecida en una conexión real UDP (
+\bar under
+por investigar
+\bar default
+).
+\end_layout
+
+\begin_layout Standard
+En general, se utilizan estas funciones para obtener los datos que llegan
+ y salen por un FD determinado, hay un manejo de colas en la función 
+\emph on
+core_readwrite
+\emph default
+, mediante la manipulación de la estructura de datos 
+\emph on
+nc_sock_t
+\emph default
+, la cual esta compuesta por la estructura 
+\emph on
+nc_buffer_t
+\emph default
+, que respresenta el buffer para un socket.
 \end_layout
 
 \begin_layout Section
