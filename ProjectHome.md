@@ -1,0 +1,1 @@
+Un intento de explicar el funcionamiento de GNU Netcat con ayuda de diagramas UML.
